@@ -1,10 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import usuarios from './bibliotecas/clases';
+import interfazadmin from './bibliotecas/interfazAdmin';
+import interfazusuario from './bibliotecas/interfazUsuario';
 export default function App() {
   const [entradanom,darentradanom] =useState('');
   const [entradaclave,darentradaclave]=useState('');
   const [responseData,setResponseData] = useState(null);
+  var usuario;
   const actualizanom = (text)=>{
     darentradanom(text);
   }
@@ -16,7 +20,7 @@ export default function App() {
     console.log(entradaclave);
   }
   const PostInicioSesion = async()=>{
-    const ruta='http://192.168.0.107:3000/inicioSesion/';
+    const ruta='http://192.168.0.114:3000/inicioSesion/';
     const data={
       usuario:entradanom,
       clave:entradaclave
@@ -32,6 +36,13 @@ export default function App() {
       const responseData = await response.json();
       setResponseData(responseData);
       console.log(responseData);
+      if(responseData.token.tokenString){
+        usuario = new usuarios(responseData.resultado.id,responseData.resultado.usuario,responseData.resultado.correo,responseData.resultado.clave,responseData.resultado.nadmin,responseData.resultado.sucursal,responseData.token.tokenString)
+      }
+      else {
+        usuario = new usuarios(responseData.resultado.id,responseData.resultado.usuario,responseData.resultado.correo,responseData.resultado.clave,responseData.resultado.nadmin,responseData.resultado.sucursal,responseData.token)
+      }
+      usuario.mostrardatosusuarios();
     }catch (error){
       console.error('Error en fetch: ',error)
     }
@@ -51,7 +62,7 @@ export default function App() {
       <Button title='Logear' style={styles.botlogeo} onPress={FunOnpress}/>
       </View>
       <StatusBar style="auto" />
-    </View>
+      </View>
   );
 }
 const styles = StyleSheet.create({
