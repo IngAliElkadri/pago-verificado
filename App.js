@@ -20,7 +20,7 @@ export default function App() {
     console.log(entradaclave);
   }
   const PostInicioSesion = async()=>{
-    const ruta='http://192.168.0.114:3000/inicioSesion/';
+    const ruta='http://192.168.0.106:3000/inicioSesion/';
     const data={
       usuario:entradanom,
       clave:entradaclave
